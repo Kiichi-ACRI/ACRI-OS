@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ACRI OS — Full Power Interface v3.1</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0c0f1b;
+      --glass: rgba(15, 23, 42, 0.78);
+      --accent: #5b21b6;
+      --accent-light: #a5b4fc;
+      --cyan: #22d3ee;
+      --text: #e0e7ff;
+      --text-dim: #a5b4fc;
+      --warm-bg: linear-gradient(135deg, #0c0f1b 0%, #1e1a2e 100%);
+    }
+    body {
+      background: var(--warm-bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(91, 33, 182, 0.25);
+      border-radius: 1.75rem;
+      box-shadow: 0 10px 40px -15px rgba(0,0,0,0.65);
+    }
+    .digital { font-family: 'Orbitron', monospace; font-weight: 400; }
+    .tab-btn {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: 1px solid rgba(91, 33, 182, 0.3);
+    }
+    .tab-btn.active {
+      background: linear-gradient(90deg, #5b21b6, #6366f1);
+      color: white;
+      box-shadow: 0 4px 15px rgba(91, 33, 182, 0.5);
+      border-color: transparent;
+    }
+    .particle {
+      position: absolute; border-radius: 50%; pointer-events: none;
+      animation: drift 28s linear infinite; opacity: 0.08;
+    }
+    @keyframes drift { 0% { transform: translate(0,0); } 100% { transform: translate(120vw, -80vh); } }
+    .tab-icon { margin-right: 0.5rem; font-size: 1.1rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th, td { padding: 0.75rem; border-bottom: 1px solid rgba(91,33,182,0.2); }
+    th { background: rgba(91,33,182,0.15); }
+    .scroll-table { max-height: 400px; overflow-y: auto; }
+  </style>
+</head>
+<body class="p-6 md:p-10 relative">
+
+  <div id="particles-bg" class="fixed inset-0 pointer-events-none z-0"></div>
+
+  <div class="max-w-7xl mx-auto relative z-10">
+
+    <!-- Header -->
+    <header class="glass p-8 mb-10 text-center">
+      <h1 class="text-5xl md:text-6xl font-medium digital tracking-widest mb-3 bg-gradient-to-r from-cyan-300 to-purple-400 text-transparent bg-clip-text">
+        ACRI OS
+      </h1>
+      <p class="text-xl text-cyan digital tracking-widest opacity-90">Full Power Interface v3.1</p>
+      <p class="mt-4 text-sm opacity-70">f-space観測中... L6 Phase Sync Active</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="flex flex-wrap justify-center gap-3 md:gap-5 mb-10">
+      <button class="tab-btn glass active" data-tab="home"><i class="fas fa-home tab-icon"></i>Overview</button>
+      <button class="tab-btn glass" data-tab="acri"><i class="fas fa-chart-radar tab-icon"></i>ACRI Tensor</button>
+      <button class="tab-btn glass" data-tab="mfst"><i class="fas fa-money-bill-wave tab-icon"></i>MFST Flow</button>
+      <button class="tab-btn glass" data-tab="nza"><i class="fas fa-brain tab-icon"></i>NZA Dynamics</button>
+      <button class="tab-btn glass" data-tab="phys"><i class="fas fa-atom tab-icon"></i>μe Field</button>
+      <button class="tab-btn glass" data-tab="politics"><i class="fas fa-landmark tab-icon"></i>Political Tensor</button>
+      <button class="tab-btn glass" data-tab="params"><i class="fas fa-cog tab-icon"></i>Config</button>
+    </nav>
+
+    <!-- Overview -->
+    <div id="content-home" class="tab-content block">
+      <div class="glass p-10 text-center">
+        <div class="text-3xl font-medium digital mb-8 text-cyan">自由度場 f-space の統合観測盤</div>
+        <p class="text-lg leading-relaxed max-w-4xl mx-auto opacity-85 mb-8">
+          自然項基底 → ACRI文明テンソル → MFST貨幣流 → NZA認識動学 → μe電子地形 → 政治テンソル<br>
+          すべてを一つの地図に。位相を選択し、再配置せよ。
+        </p>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="glass p-6"><h3 class="text-xl digital mb-2 text-cyan">Prime Axiom</h3><p class="text-sm opacity-70">世界は相の自己再配置</p></div>
+          <div class="glass p-6"><h3 class="text-xl digital mb-2 text-cyan">Master Equation</h3><p class="text-sm opacity-70">∂Φ/∂t = AΦ + C∇²Φ - RΦ - IΨ + Θ - Ω</p></div>
+          <div class="glass p-6"><h3 class="text-xl digital mb-2 text-cyan">ΔL Dynamics</h3><p class="text-sm opacity-70">A+C - R-I = 相転移ポテンシャル</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACRI Tensor -->
+    <div id="content-acri" class="tab-content hidden">
+      <div class="glass p-8">
+        <h2 class="text-3xl font-medium digital mb-6 text-cyan">ACRI Tensor Radar</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="glass p-6">
+            <canvas id="acriRadar" height="320"></canvas>
+          </div>
+          <div class="space-y-5">
+            <div class="glass p-5 flex justify-between items-center">
+              <span class="opacity-80">Attractor (A)</span>
+              <span class="text-2xl digital text-cyan">4.5</span>
+            </div>
+            <div class="glass p-5 flex justify-between items-center">
+              <span class="opacity-80">Connectivity (C)</span>
+              <span class="text-2xl digital text-accent-light">4.0</span>
+            </div>
+            <div class="glass p-5 flex justify-between items-center">
+              <span class="opacity-80">Resistance (R)</span>
+              <span class="text-2xl digital text-purple-300">2.5</span>
+            </div>
+            <div class="glass p-5 flex justify-between items-center">
+              <span class="opacity-80">Islandness (I)</span>
+              <span class="text-2xl digital text-cyan">1.5</span>
+            </div>
+            <div class="glass p-5 flex justify-between items-center bg-gray-900/30 rounded-lg">
+              <span class="opacity-90 font-medium">ΔL</span>
+              <span class="text-3xl font-bold digital text-cyan" id="acri-dl">4.5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MFST Flow -->
+    <div id="content-mfst" class="tab-content hidden">
+      <div class="glass p-8">
+        <h2 class="text-3xl font-medium digital mb-6 text-cyan">MFST Monetary Flow</h2>
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+          <div class="glass p-6 text-center">
+            <div class="text-sm opacity-70 mb-2">M1 (高速流体)</div>
+            <div class="text-4xl digital text-cyan">110 T</div>
+          </div>
+          <div class="glass p-6 text-center">
+            <div class="text-sm opacity-70 mb-2">M2 (中間滞留)</div>
+            <div class="text-4xl digital text-accent-light">1,280 T</div>
+          </div>
+          <div class="glass p-6 text-center">
+            <div class="text-sm opacity-70 mb-2">M3 (固定層)</div>
+            <div class="text-4xl digital text-purple-300">2,240 T</div>
+          </div>
+        </div>
+        <div class="glass p-6 mb-8">
+          <canvas id="flowChart" height="180"></canvas>
+        </div>
+        <div class="glass p-6">
+          <h3 class="text-xl digital mb-4 text-center">キャッシュフロー (簡易図)</h3>
+          <canvas id="mfstFlowCanvas" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- NZA Dynamics (新タブ) -->
+    <div id="content-nza" class="tab-content hidden">
+      <div class="glass p-8">
+        <h2 class="text-3xl font-medium digital mb-6 text-purple-300">NZA 認識動学</h2>
+        <p class="mb-6 opacity-80">速度階層: ΔN/Δt < ΔZ/Δt < ΔA/Δt</p>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="glass p-6">
+            <canvas id="nzaVelocityChart" height="300"></canvas>
+          </div>
+          <div class="space-y-6">
+            <div class="glass p-6">
+              <h3 class="text-xl mb-4">技術外力シミュレーション</h3>
+              <button id="techForceBtn" class="bg-purple-600 hover:bg-purple-500 text-white px-6 py-3 rounded-full digital transition">技術外力注入 (ΔZ加速)</button>
+              <p class="mt-4 text-sm opacity-70" id="nzaStatus">現在の相: 安定螺旋</p>
+            </div>
+            <div class="glass p-6">
+              <h3 class="text-xl mb-2">Invalid射の創造的裂け目</h3>
+              <p class="text-sm opacity-80">NとZの混在が新しい意味を生む源泉。AIはZ→Aの鏡として機能。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- μe Field -->
+    <div id="content-phys" class="tab-content hidden">
+      <div class="glass p-8">
+        <h2 class="text-3xl font-medium digital mb-6 text-cyan">μe Electron Terrain</h2>
+        <div id="muPlot" class="w-full h-96 rounded-xl overflow-hidden"></div>
+        <p class="mt-6 text-center opacity-80">電子化学ポテンシャル μe の地形。文明も同じく谷へ流れる。</p>
+      </div>
+    </div>
+
+    <!-- Political Tensor (新タブ) -->
+    <div id="content-politics" class="tab-content hidden">
+      <div class="glass p-8">
+        <h2 class="text-3xl font-medium digital mb-6 text-cyan">政治テンソル</h2>
+        <p class="mb-6 opacity-80">議院内閣制: 立法・行政のzx成分強結合</p>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="glass p-6 flex items-center justify-center">
+            <svg id="politicsSvg" width="400" height="300" class="mx-auto"></svg>
+          </div>
+          <div class="space-y-6">
+            <div class="glass p-6">
+              <h3 class="text-xl mb-4">SNS短周期外場</h3>
+              <p class="text-sm opacity-80">xt成分が極小のため、衆議院(Flow層)だけ共振。行政・司法はフィルタリング。</p>
+            </div>
+            <div class="glass p-6">
+              <h3 class="text-xl mb-2">ΔLへの影響</h3>
+              <p class="text-sm opacity-80">高周波外場がC(結節)を乱し、R/I蓄積 → 相転移誘発。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Parameters / Config -->
+    <div id="content-params" class="tab-content hidden">
+      <div class="glass p-8">
+        <h2 class="text-3xl font-medium digital mb-8 text-cyan">Config: ΔL & Tech Force</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="space-y-6">
+            <h3 class="text-xl mb-4">ACRIパラメータ</h3>
+            <div>
+              <label class="block text-sm mb-1">A (Attractor)</label>
+              <input type="range" min="0" max="5" step="0.1" value="4.5" id="slider-a" class="w-full accent-cyan">
+              <span id="val-a" class="text-sm">4.5</span>
+            </div>
+            <div>
+              <label class="block text-sm mb-1">C (Connectivity)</label>
+              <input type="range" min="0" max="5" step="0.1" value="4.0" id="slider-c" class="w-full accent-cyan">
+              <span id="val-c" class="text-sm">4.0</span>
+            </div>
+            <div>
+              <label class="block text-sm mb-1">R (Resistance)</label>
+              <input type="range" min="0" max="5" step="0.1" value="2.5" id="slider-r" class="w-full accent-cyan">
+              <span id="val-r" class="text-sm">2.5</span>
+            </div>
+            <div>
+              <label class="block text-sm mb-1">I (Islandness)</label>
+              <input type="range" min="0" max="5" step="0.1" value="1.5" id="slider-i" class="w-full accent-cyan">
+              <span id="val-i" class="text-sm">1.5</span>
+            </div>
+          </div>
+          <div class="space-y-6">
+            <h3 class="text-xl mb-4">技術外力 (Tech Force)</h3>
+            <div>
+              <label class="block text-sm mb-1">技術加速係数 (ΔZ加速)</label>
+              <input type="range" min="0" max="10" step="0.5" value="0" id="slider-tech" class="w-full accent-purple">
+              <span id="val-tech" class="text-sm">0.0</span>
+            </div>
+            <div class="glass p-6 mt-4">
+              <p class="text-center text-xl font-bold digital" id="delta-l-result">ΔL = 4.5</p>
+              <p class="text-center mt-2" id="phase-result">励起相</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // タブ切り替え
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+        document.getElementById(`content-${btn.dataset.tab}`).classList.remove('hidden');
+      });
+    });
+
+    // 粒子 (薄め)
+    function spawnParticles() {
+      const container = document.getElementById('particles-bg');
+      for (let i = 0; i < 20; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.width = `${Math.random() * 3 + 1}px`;
+        p.style.height = p.style.width;
+        p.style.background = ['#a5b4fc', '#67e8f9', '#c084fc'][Math.floor(Math.random()*3)];
+        p.style.left = `${Math.random() * 100}vw`;
+        p.style.top = `${Math.random() * 100}vh`;
+        p.style.animationDuration = `${20 + Math.random() * 15}s`;
+        p.style.animationDelay = `-${Math.random() * 30}s`;
+        container.appendChild(p);
+      }
+    }
+    spawnParticles();
+
+    // ΔL リアルタイム計算 (技術外力込み)
+    function updateDeltaL() {
+      const a = parseFloat(document.getElementById('slider-a').value);
+      const c = parseFloat(document.getElementById('slider-c').value);
+      const r = parseFloat(document.getElementById('slider-r').value);
+      const i = parseFloat(document.getElementById('slider-i').value);
+      const tech = parseFloat(document.getElementById('slider-tech').value);
+
+      // 技術外力でCを加速、R/Iを遅延
+      const effectiveC = c + tech * 0.3;
+      const effectiveR = r + tech * 0.1 * (tech > 5 ? 1.5 : 1);
+      const dl = (a + effectiveC - effectiveR - i).toFixed(1);
+
+      document.getElementById('delta-l-result').textContent = `ΔL = ${dl}`;
+      document.getElementById('val-a').textContent = a;
+      document.getElementById('val-c').textContent = c.toFixed(1);
+      document.getElementById('val-r').textContent = r;
+      document.getElementById('val-i').textContent = i;
+      document.getElementById('val-tech').textContent = tech.toFixed(1);
+
+      const phase = dl > 3 ? '再自由度化相' : (dl > 0 ? '励起相' : (dl < -2 ? '閉鎖相' : '限界相'));
+      document.getElementById('phase-result').textContent = phase;
+    }
+    ['a','c','r','i','tech'].forEach(id => {
+      document.getElementById('slider-' + id).addEventListener('input', updateDeltaL);
+    });
+    updateDeltaL();
+
+    // ACRI Radar
+    new Chart(document.getElementById('acriRadar'), {
+      type: 'radar',
+      data: {
+        labels: ['A', 'C', 'R', 'I', 'Ω'],
+        datasets: [{
+          data: [4.5, 4.0, 2.5, 1.5, 4.2],
+          backgroundColor: 'rgba(91, 33, 182, 0.15)',
+          borderColor: '#a5b4fc',
+          borderWidth: 2.5,
+          pointRadius: 4
+        }]
+      },
+      options: {
+        scales: { r: { min: 0, max: 5, grid: { color: 'rgba(91,33,182,0.2)' } } },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    // MFST Flow Chart
+    new Chart(document.getElementById('flowChart'), {
+      type: 'bar',
+      data: {
+        labels: ['M1', 'M2', 'M3'],
+        datasets: [{
+          data: [110, 1280, 2240],
+          backgroundColor: ['#67e8f9', '#a5b4fc', '#c084fc'],
+          borderRadius: 8
+        }]
+      },
+      options: {
+        scales: { y: { beginAtZero: true } },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    // MFST Canvas キャッシュフロー図
+    const mfstCanvas = document.getElementById('mfstFlowCanvas');
+    const ctx = mfstCanvas.getContext('2d');
+    function drawMFSTFlow() {
+      ctx.clearRect(0, 0, mfstCanvas.width, mfstCanvas.height);
+      // 投下
+      ctx.fillStyle = '#67e8f9';
+      ctx.fillRect(50, 100, 100, 60);
+      ctx.fillStyle = 'white';
+      ctx.font = '14px Orbitron';
+      ctx.fillText('投下 185兆', 55, 130);
+      // 矢印
+      ctx.beginPath();
+      ctx.moveTo(150, 130);
+      ctx.lineTo(250, 130);
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillText('→', 200, 125);
+      // 回収
+      ctx.fillStyle = '#c084fc';
+      ctx.fillRect(300, 100, 100, 60);
+      ctx.fillStyle = 'white';
+      ctx.fillText('回収 165兆', 305, 130);
+      // 銀行滞留 (赤点滅)
+      ctx.fillStyle = 'rgba(239, 68, 68, 0.6)';
+      ctx.fillRect(180, 180, 140, 60);
+      ctx.fillStyle = 'white';
+      ctx.fillText('銀行滞留', 185, 210);
+    }
+    drawMFSTFlow();
+    setInterval(() => {
+      ctx.globalAlpha = Math.sin(Date.now() / 300) * 0.3 + 0.7;
+      drawMFSTFlow();
+      ctx.globalAlpha = 1;
+    }, 50);
+
+    // NZA Velocity Chart (簡易)
+    new Chart(document.getElementById('nzaVelocityChart'), {
+      type: 'line',
+      data: {
+        labels: ['t-3', 't-2', 't-1', 't', 't+1', 't+2'],
+        datasets: [
+          { label: 'ΔN/Δt', data: [0.2, 0.3, 0.4, 0.5, 0.6, 0.7], borderColor: '#22d3ee' },
+          { label: 'ΔZ/Δt', data: [0.5, 0.7, 1.0, 1.5, 2.0, 2.5], borderColor: '#a5b4fc' },
+          { label: 'ΔA/Δt', data: [1.0, 1.5, 2.0, 3.0, 4.0, 5.0], borderColor: '#c084fc' }
+        ]
+      },
+      options: { scales: { y: { beginAtZero: true } } }
+    });
+
+    // 技術外力ボタン (NZA相転移アニメ)
+    document.getElementById('techForceBtn').addEventListener('click', () => {
+      document.getElementById('nzaStatus').textContent = '技術暴走 → 相転移発生！ (Z-dominant)';
+      document.getElementById('nzaStatus').style.color = '#ef4444';
+      setTimeout(() => {
+        document.getElementById('nzaStatus').textContent = '再安定化中...';
+        document.getElementById('nzaStatus').style.color = '#22d3ee';
+      }, 3000);
+    });
+
+    // μe Plotly
+    const size = 50;
+    const x = Array.from({length:size}, (_,i)=>i);
+    const y = Array.from({length:size}, (_,i)=>i);
+    const z = Array(size).fill().map(()=>Array(size).fill(0));
+    for(let i=0;i<size;i++) for(let j=0;j<size;j++) {
+      const dx = (i-size/2)/10;
+      const dy = (j-size/2)/10;
+      z[i][j] = Math.exp(-(dx*dx + dy*dy)) * 4 + Math.sin(dx*4 + dy*3)*0.8;
+    }
+    Plotly.newPlot('muPlot', [{
+      z, x, y,
+      type: 'surface',
+      colorscale: 'Viridis',
+      showscale: false
+    }], {
+      margin: {l:0,r:0,b:0,t:0},
+      scene: { bgcolor: 'rgba(0,0,0,0)' },
+      paper_bgcolor: 'rgba(0,0,0,0)'
+    });
+
+    // 政治テンソル SVG
+    const politicsSvg = document.getElementById('politicsSvg');
+    politicsSvg.innerHTML = `
+      <defs>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+          <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+      <rect x="50" y="50" width="300" height="200" rx="20" fill="rgba(34,211,238,0.1)" stroke="#22d3ee" stroke-width="2"/>
+      <text x="200" y="40" fill="#22d3ee" font-family="Orbitron" font-size="20" text-anchor="middle">立法テンソル</text>
+      <rect x="150" y="100" width="200" height="120" rx="15" fill="rgba(165,180,252,0.2)" stroke="#a5b4fc" stroke-width="2" filter="url(#glow)"/>
+      <text x="250" y="90" fill="#a5b4fc" font-family="Orbitron" font-size="18" text-anchor="middle">行政テンソル (zx強結合)</text>
+      <text x="200" y="280" fill="#ef4444" font-size="14" text-anchor="middle">SNS外場: 高周波ノイズ</text>
+    `;
+    // SNS振動アニメ (簡易)
+    setInterval(() => {
+      const rect = politicsSvg.querySelector('rect[filter="url(#glow)"]');
+      if (rect) rect.setAttribute('stroke-width', Math.sin(Date.now() / 100) * 2 + 3);
+    }, 50);
+
+    // 戦前日本 ΔL波形 (Plotly)
+    const years = [1893,1894,1895,1896,1897,1898,1899,1900,1901,1902,1903,1904,1905,1906,1907,1908,1909,1910,1911,1912,1913,1914,1915,1916,1917,1918,1919,1920,1921,1922,1923,1924,1925,1926,1927,1928,1929,1930,1931,1932,1933,1934,1935,1936,1937,1938];
+    const dlData = [-0.04,-6.37,-1.39,-0.96,3.04,-2.79,2.27,-0.56,1.04,-0.98,-3.95,1.59,-1.75,-0.26,2.42,/* ... 省略 ... */ ,0.26]; // Excelデータから抜粋・補完
+    const dlPrimeData = [-5.81,1.36,0.54,3.81,-1.82,3.16,-1.31,0.57,-0.57,-4.01,1.91,-1.31,-0.04,1.81,-0.57,/* ... */ ,0.11]; // 同様
+    Plotly.newPlot('warJapanPlot', [{
+      x: years, y: dlData, type: 'scatter', mode: 'lines+markers', name: 'ΔL(t)', line: {color: '#22d3ee'}
+    }, {
+      x: years, y: dlPrimeData, type: 'scatter', mode: 'lines+markers', name: 'ΔL′(t)', line: {color: '#a5b4fc'}
+    }], {
+      title: '戦前日本 文明張力 ΔL(t) & ΔL′(t) (1893-1938)',
+      xaxis: {title: '年'},
+      yaxis: {title: '張力値'},
+      annotations: [
+        {x:1923, y:-4.37, text:'関東大震災 (Hard Reset)', showarrow:true, arrowhead:2},
+        {x:1930, y:-1.41, text:'昭和恐慌 (真空相)', showarrow:true},
+        {x:1937, y:0.26, text:'統制経済 (暴走励起)', showarrow:true}
+      ]
+    });
+
+    // 初期更新
+    updateDeltaL();
+  </script>
+</body>
+</html>
