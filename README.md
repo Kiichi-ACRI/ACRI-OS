@@ -69,7 +69,6 @@ This repository contains the formal specifications, diagrams, and research notes
 /Diagrams/         — Structural diagrams
 /Papers/           — Whitepapers, abstracts, Ig Nobel materials
 '''
-
 ---
 
 ## 👤 Author
