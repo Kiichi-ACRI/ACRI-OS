@@ -60,19 +60,13 @@ This repository contains the formal specifications, diagrams, and research notes
 ---
 
 ## 📁 Repository Structure
-```/Flow2.0/ — Observer OS specifications```
-
-```/DeltaL/ — ΔL dynamics and algorithms ```
-
-```/CivilizationPDE/ — PDE models and discretization ```
-
-```/ACRI-Units/ — Units Layer and dimensional analysis ```
-
-```/DSOT/ — Thermodynamic layer ```
-
-```/Diagrams/ — Structural diagrams ```
-
-```/Papers/ — Whitepapers, abstracts, Ig Nobel materials```
+/Flow2.0/          — Observer OS specifications
+/DeltaL/           — ΔL dynamics and algorithms
+/CivilizationPDE/  — PDE models and discretization
+/ACRI-Units/       — Units Layer and dimensional analysis
+/DSOT/             — Thermodynamic layer
+/Diagrams/         — Structural diagrams
+/Papers/           — Whitepapers, abstracts, Ig Nobel materials
 
 ---
 
