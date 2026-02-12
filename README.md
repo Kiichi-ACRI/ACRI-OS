@@ -69,6 +69,34 @@ This repository contains the formal specifications, diagrams, and research notes
 /Diagrams/         — Structural diagrams
 /Papers/           — Whitepapers, abstracts, Ig Nobel materials
 ```
+
+---
+## Publications (Selected Works)
+
+### 見えない地図の読み方  
+提出日: 2026/02/07  
+ASIN: B0GM3GF8PK  
+
+### 電子階層理論 ELH：電磁気・μe・スピンを貫く三階建てモデル  
+提出日: 2026/02/03  
+ASIN: B0GL9CC6VT  
+
+### 貨幣流構造論 MFST  
+提出日: 2026/01/16  
+ASIN: B0GH8PNRKH  
+
+### Non‑Continuous Fluid Dynamics: A Structural Extension Beyond Navier–Stokes  
+提出日: 2026/01/13  
+ASIN: B0GGDLS76G  
+
+### 非連続流体力学序説 — Navier–Stokesの適用範囲を超える乱流の構造  
+提出日: 2026/01/11  
+ASIN: B0GG5RQKXB  
+
+### 電子地形統一理論 — 電子化学ポテンシャル μe がつなぐ世界  
+提出日: 2026/01/01  
+ASIN: B0GDNCRHSH  
+
 ---
 
 ## 👤 Author
